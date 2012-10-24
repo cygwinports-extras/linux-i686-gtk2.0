@@ -1,0 +1,33 @@
+CROSS_HOST="i686-pc-linux-gnu"
+ORIG_PN="gtk+"
+inherit cross gnome2
+
+NAME="linux-i686-gtk2.0"
+VERSION=2.24.13
+RELEASE=1
+CATEGORY="Devel"
+SUMMARY="GTK+ GUI toolkit for Linux i686 toolchain"
+DESCRIPTION="This package does NOT contain cygwin binaries.
+Instead, it contains Linux ELF binaries.  It is for use with the
+linux-i686-gcc cross compiler, and installs into the
+/usr/i686-pc-linux-gnu/sys-root/usr/{lib,include} directories."
+HOMEPAGE="http://www.gtk.org/"
+
+DIFF_EXCLUDES="gdk.rc"
+
+CYGCONF_ARGS="
+	--disable-glibtest
+	--disable-test-print-backend
+	--with-gdktarget=x11
+"
+
+src_install() {
+	cd ${B}
+	cyginstall
+
+	rm -fr ${D}${CROSS_BINDIR}/ ${D}${CROSS_SYSROOT}/etc/
+	rm -fr ${D}${CROSS_LIBDIR}/gtk-2.0/{2.*,modules}/
+	rm -fr ${D}${CROSS_DATADIR}/{gtk-2.0,locale,man,themes}/
+}
+
+KEEP_LA_FILES="none"
